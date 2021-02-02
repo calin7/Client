@@ -1,0 +1,75 @@
+﻿@model Client.Models.MemeModel
+
+@{
+    ViewData["Title"] = "AddMeme";
+}
+<html>
+<body>
+
+
+    <h1>AddMeme</h1>
+
+    <h4>MemeModel</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            @using (Html.BeginForm())
+            {
+                <form asp-action="PostMeme">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="TopText" class="control-label"></label>
+                        <input asp-for="TopText" id="topText" class="form-control" />
+                        <span asp-validation-for="TopText" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BottomText" class="control-label"></label>
+                        <input asp-for="BottomText" id="bottomText"class="form-control" />
+                        <span asp-validation-for="BottomText" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" id="btnadd"value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+
+<!-- contact end -->
+<!-- Javascript files-->
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/popper.min.js"></script>
+<script src="~/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+
+<script src="~/js/jquery-3.0.0.min.js"></script>
+<script src="~/js/plugin.js"></script>
+<!-- javascript -->
+<script src="~/js/owl.carousel.js"></script>
+<script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+    <script>
+        $("#btnadd").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/PostMeme",
+                data: {
+                    "topText": $("#topText").val(),
+                    "bottomText": $("#bottomText").val(),
+                },
+                success: function (response) {
+                    if (response.valid == true) {
+                        $("#displayMessage").show();
+                    }
+                    console.log(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

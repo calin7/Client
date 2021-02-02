@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+
+<html>
+<body>
+<h1>Memes</h1>
+<div>
+    <table id="table"></table>
+</div>
+<div>
+    <button id="btnLoad" type="button">Load</button>
+</div>
+
+<!-- contact end -->
+<!-- Javascript files-->
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/popper.min.js"></script>
+<script src="~/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="~/js/jquery-3.0.0.min.js"></script>
+<script src="~/js/plugin.js"></script>
+<!-- javascript -->
+<script src="~/js/owl.carousel.js"></script>
+<script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+<script>
+    
+    $("#btnLoad").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetMemes",
+                success: function (response) {
+                    $("#table").empty();
+                    if (Object.keys(response).length > 0) {
+                        $("#table").append(" <tr><th>Top Text</th><th>Bottom Text</th></tr>");
+                        $.each(response, function (index, value) {
+                            $("#table").append(" <tr><th>" + value.topText + "</th><th>" + value.bottomText + "</th>" +value.Id + "</th>"+ "<th><button id=btngen type=button> Generate Meme</button></th></tr>");
+                        });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+    });
+
+</script>
+</body>
+</html>

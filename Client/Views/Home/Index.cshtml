@@ -1,0 +1,164 @@
+﻿@model IEnumerable<Client.Models.MemeModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<html>
+<body>
+<h1>Login</h1>
+<div id="login" class="col-md-4">
+    <ul id="loginArea">
+        <li> <input id="username" type="text" placeholder="username" name="username"class="form-control"></li>
+        <li> <input id="password" type="password" placeholder="password" name="password"class="form-control"></li>
+        <li><button id="btnLogin" type="button" class="btn btn-primary">Login</button></li>
+    </ul>
+</div>
+<div id="image">
+    <h1>Generate Meme</h1>
+</div>
+<div class="col-md-4">
+    <form>
+        <div>
+            <input id="topText" type="text" placeholder="Top Text" name="topText" class="form-control">
+            <input id="bottomText" type="text" placeholder="Bottom Text" name="bottomText" class="form-control">
+        </div>
+    </form>
+</div>
+   
+    <table id="table" class="table">
+    </table>
+    <div class="send_btn">
+        <button id="btngenerate" type="button">Generate</button>
+
+    </div>
+    <!-- contact end -->
+    <!-- Javascript files-->
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+
+    <script src="~/js/jquery-3.0.0.min.js"></script>
+    <script src="~/js/plugin.js"></script>
+    <!-- javascript -->
+    <script src="~/js/owl.carousel.js"></script>
+    <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+    <script>
+        $("#btnLogin").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/LoginMethod",
+                data: {
+                    "username": $("#username").val(),
+                    "password": $("#password").val(),
+                },
+                success: function (response) {
+                    if (response.valid == true) {
+                        $('#login').hide();
+                        
+                    }
+                    console.log(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+        $("#btnSignOut").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/SignOutMethod",
+                success: function (response) {
+                    if (response.valid == true) {
+                        $('#username').show();
+                        $('#password').show();
+                        $('#btnLogin').show();
+                        $('#btnSignOut').hide();
+                    }
+                    console.log(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+        $("#btnSignOut").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/SignOutMethod",
+                success: function (response) {
+                    if (response.valid == true) {
+                        $('#username').show();
+                        $('#password').show();
+                        $('#btnLogin').show();
+                        $('#btnSignOut').hide();
+                    }
+                    console.log(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+        $("#btnLoad").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetMemes",
+                success: function (response) {
+                    $("#table").empty();
+                    if (Object.keys(response).length > 0) {
+                        $("#table").append(" <tr><th>Top Text</th><th>Bottom Text</th></tr>");
+                        $.each(response, function (index, value) {
+                            $("#table").append(" <tr><th>" + value.topText + "</th><th>" + value.bottomText + "</th>" + "<th><button id=btngen type=button> Generate Meme</button></th></tr>");
+                        });
+                    }
+                },
+                failure: function (response) {
+                    console.log(response);
+                    alert(response.message);
+                },
+                error: function (response) {
+                    console.log(response);
+                    alert(response.message);
+                }
+            });
+        });
+
+        $("#btngenerate").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GenerateMeme",
+                data: {
+                    "topText": $("#topText").val(),
+                    "bottomText": $("#bottomText").val()
+
+                },
+                success: function (response) {
+                    $("#image").append("<img src=data:image/jpg;base64," + response + "/>");
+                    console.log(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+            
+        });
+    </script>
+</body>
+</html>
